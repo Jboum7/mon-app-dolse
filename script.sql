@@ -11,3 +11,5 @@ VALUES ('M2i', 'm2i@gmail.com', '$2y$10$2CTv2LcrLK42K5eKezQDDu0bwhufFYVPCMwsPa/c
        ('RaniLeBG', 'rani@gmail.com', '$2y$10$2CTv2LcrLK42K5eKezQDDu0bwhufFYVPCMwsPa/cAI/8wY5JaZLeK'),
        ('AuroreFitness', 'a.fitrness@gmail.com', '$2y$10$2CTv2LcrLK42K5eKezQDDu0bwhufFYVPCMwsPa/cAI/8wY5JaZLeK'),
        ('Cristaline', 'crista@gmail.com', '$2y$10$2CTv2LcrLK42K5eKezQDDu0bwhufFYVPCMwsPa/cAI/8wY5JaZLeK');
+
+Crea
