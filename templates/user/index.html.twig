@@ -16,15 +16,15 @@
         </thead>
         <tbody>
         {% for user in users %}
-
-        <tr>
-            <th>{{ user.id }}</th>
-            <td>{{ user.username }}</td>
-            <td>{{ user.email }}</td>
-            <td>
-                <a href="{{ patch('app_user_show',{'id:user.id'}) }}">Show</a>
-            </td>
-        </tr>
+            <tr>
+                <th>{{ user.id }}</th>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <a href="{{ path('app_user_show', {"id":user.id}) }}">Show</a>
+                    <a href="{{ path('app_user_edit', {"id":user.id}) }}">Edit</a>
+                </td>
+            </tr>
         {% endfor %}
         </tbody>
     </table>

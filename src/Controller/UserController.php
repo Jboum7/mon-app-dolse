@@ -55,6 +55,42 @@ final class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/user/{id}', name: 'app_user_show', methods: ['GET'])]
+    public function show(User $user): Response
+    {
+        return $this->render('user/show.html.twig', [
+            'user' => $user
+        ]);
+    }
+
+    #[Route('/user/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
+    public function edit(User $user, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createFormBuilder($user)
+            ->add('username', TextType::class)
+            ->add('email', EmailType::class)
+            ->add('password', PasswordType::class)
+            ->add('submit', SubmitType::class, [
+                'label' => 'Enregistrer'
+            ])
+            ->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_user_index');
+
+        }
+
+        return $this->render('user/edit.html.twig', [
+            'form' => $form->createView(),
+            "user" => $user,
+        ]);
+    }
+
+
 
     #[Route('/user/{id}/delete', name: 'app_user_delete', methods: ['POST'])]
     public function delete(User $user, Request $request, EntityManagerInterface $entityManager): Response
