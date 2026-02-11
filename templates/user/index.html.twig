@@ -1,19 +1,23 @@
 {% extends 'base.html.twig' %}
+
 {% block title %}
     {{ title }}
 {% endblock %}
 
 
 {% block body %}
-    <table>
+    <h1>{{ title }}</h1>
 
+    <table class="table">
         <thead>
         <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Username</th>
-            <th scope="col">Email</th>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Actions</th>
         </tr>
         </thead>
+
         <tbody>
         {% for user in users %}
             <tr>
@@ -21,12 +25,14 @@
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
                 <td>
-                    <a href="{{ path('app_user_show', {"id":user.id}) }}">Show</a>
-                    <a href="{{ path('app_user_edit', {"id":user.id}) }}">Edit</a>
+                    <a class="btn btn-warning" href="{{ path('app_user_show', {'id': user.id}) }}">Show</a>
+                    <a class="btn btn-secondary" href="{{ path('app_user_edit', {'id': user.id}) }}">Edit</a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
+
     </table>
 
 {% endblock %}
+

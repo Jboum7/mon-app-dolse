@@ -7,7 +7,7 @@
 
     <form action="{{ url('app_user_delete', { 'id': user.id }) }}" method="post">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-        <button type="submit">Delete</button>
+        <button type="submit" class="btn btn-danger">Delete</button>
     </form>
 
     {% include 'user/_form.html.twig' %}
