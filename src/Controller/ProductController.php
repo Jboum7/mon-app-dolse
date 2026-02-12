@@ -6,7 +6,10 @@ use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,13 +26,31 @@ final class ProductController extends AbstractController
     }
 
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(
+        Request                                                            $request,
+        EntityManagerInterface                                             $entityManager,
+        #[Autowire('%kernel.project_dir%/public/uploads/products')] string $imagesDirectory
+    ): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile) {
+                $newFilename = uniqid('products_', true) . '.' . $imageFile->guessExtension();
+
+                try {
+                    $imageFile->move($imagesDirectory, $newFilename);
+                } catch (FileException $e) {
+                    throw new Exception($e->getMessage());
+                }
+
+                $product->setImageFilename($newFilename);
+            }
+
             $entityManager->persist($product);
             $entityManager->flush();
 
@@ -51,12 +72,39 @@ final class ProductController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
+    public function edit(
+        Request                                                            $request,
+        Product                                                            $product,
+        EntityManagerInterface                                             $entityManager,
+        #[Autowire('%kernel.project_dir%/public/uploads/products')] string $imagesDirectory
+    ): Response
     {
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile) {
+                // remove old image
+                if ($product->getImageFilename()) {
+                    $oldImagePath = $this->getParameter('kernel.project_dir') . '/public/uploads/products/' . $product->getImageFilename();
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
+                }
+
+                $newFilename = uniqid('products_', true) . '.' . $imageFile->guessExtension();
+
+                try {
+                    $imageFile->move($imagesDirectory, $newFilename);
+                } catch (FileException $e) {
+                    throw new Exception($e->getMessage());
+                }
+
+                $product->setImageFilename($newFilename);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
