@@ -2,7 +2,10 @@
 
 {% block title %}Acceui{% endblock %}
 {% block body %}
+    <div class="d-flex gap-5">
+
     {% for product in products %}
         {% include '_partials/_card.html.twig' %}
     {% endfor %}
+    </div>
 {% endblock %}
