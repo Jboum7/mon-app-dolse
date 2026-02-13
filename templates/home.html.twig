@@ -1,6 +1,8 @@
 {% extends'base.html.twig' %}
 
-{% block title%}Acceui{% endblock %}
+{% block title %}Acceui{% endblock %}
 {% block body %}
-    <h1>Vous etes sur la page Home </h1>
+    {% for product in products %}
+        {% include '_partials/_card.html.twig' %}
+    {% endfor %}
 {% endblock %}
