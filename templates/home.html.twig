@@ -1,11 +1,19 @@
-{% extends'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Acceui{% endblock %}
+{% block title %}Accueil{% endblock %}
+
 {% block body %}
-    <div class="d-flex gap-5">
+    <h1>Vous etes sur la page Home</h1>
 
-    {% for product in products %}
-        {% include '_partials/_card.html.twig' %}
-    {% endfor %}
-    </div>
+    <section>
+        <h2>Les derniers produits à -50%</h2>
+
+        <div class="d-flex flex-wrap gap-5">
+            {% for product in products %}
+                {{ include('_partials/_card.html.twig', {'product': product}) }}
+            {% endfor %}
+        </div>
+    </section>
+
 {% endblock %}
+
