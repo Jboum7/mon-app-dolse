@@ -126,6 +126,7 @@ final class ProductController extends AbstractController
                     unlink($oldImagePath);
                 }
             }
+
             $entityManager->remove($product);
             $entityManager->flush();
         }
