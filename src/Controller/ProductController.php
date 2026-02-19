@@ -18,10 +18,17 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ProductController extends AbstractController
 {
     #[Route(name: 'app_product_index', methods: ['GET'])]
-    public function index(ProductRepository $productRepository): Response
+    public function index(Request $request, ProductRepository $productRepository): Response
     {
+        $size = isset($request->query->all()['size']) ? $request->query->get('size') : 10;
+        $page = isset($request->query->all()['page']) ? $request->query->get('page') : 10;
+
+        $data = $productRepository->findPaginate($size, $page);
+
+
         return $this->render('admin/product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+            'products' => $data['products'],
+            'count' => $data['count'],
         ]);
     }
 
@@ -134,3 +141,4 @@ final class ProductController extends AbstractController
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
     }
 }
+
